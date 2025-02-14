@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js + Prisma + AuthJS Starter Template
+
+A modern full-stack starter template built with Next.js 14, Prisma, and AuthJS (NextAuth). Features TypeScript, Tailwind CSS, and shadcn/ui components out of the box.
+
+## Features
+
+- 🚀 [Next.js 14](https://nextjs.org/) with App Router
+- 🔐 Authentication with [AuthJS](https://authjs.dev/) (formerly NextAuth)
+  - Google OAuth provider
+  - Email/Password authentication
+  - JWT strategy
+- 🗃️ [Prisma](https://www.prisma.io/) as ORM
+  - PostgreSQL database
+  - Authentication models included
+- 🎨 Styling and UI
+  - [Tailwind CSS](https://tailwindcss.com/)
+  - [shadcn/ui](https://ui.shadcn.com/) components
+  - [Geist](https://vercel.com/font) font family
+- 🐳 Docker Compose setup for PostgreSQL
+- 📦 [pnpm](https://pnpm.io/) as package manager
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ 
+- pnpm
+- Docker (for PostgreSQL)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/BlitzJB/next-prisma-authjs-starter.git
+cd next-prisma-authjs-starter
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up your environment variables:
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Update the following variables in your `.env`:
+- `NEXTAUTH_SECRET` (Generate with: `openssl rand -base64 32`)
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
 
-## Learn More
+5. Start the PostgreSQL database:
+```bash
+docker-compose up -d
+```
 
-To learn more about Next.js, take a look at the following resources:
+6. Run database migrations:
+```bash
+npx prisma migrate dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+7. Start the development server:
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Visit `http://localhost:3000` to see your application.
 
-## Deploy on Vercel
+## Authentication Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Google OAuth
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Go to the [Google Cloud Console](https://console.cloud.google.com)
+2. Create a new project or select an existing one
+3. Enable the Google+ API
+4. Create OAuth 2.0 credentials
+5. Add authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
+6. Copy the client ID and secret to your `.env` file
+
+### Email/Password Authentication
+
+The template includes email/password authentication out of the box. Users can:
+- Register with email and password
+- Sign in with existing credentials
+- Password hashing using bcrypt
+
+## Project Structure
+
+```
+.
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   │   └── auth/         # AuthJS configuration
+│   ├── auth/             # Authentication pages
+│   └── ...               # Other app routes
+├── lib/                   # Utility functions
+├── prisma/               # Prisma schema and migrations
+│   └── schema.prisma     # Database schema
+└── docker-compose.yml    # Docker configuration
+```
+
+## Database Schema
+
+The template includes the following models:
+- `User`: Core user model with auth fields
+- `Account`: OAuth accounts
+- `Session`: User sessions
+- `VerificationToken`: Email verification
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Next.js](https://nextjs.org/)
+- [Prisma](https://www.prisma.io/)
+- [AuthJS](https://authjs.dev/)
+- [shadcn/ui](https://ui.shadcn.com/)
